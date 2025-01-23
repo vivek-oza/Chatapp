@@ -17,12 +17,21 @@
     </div>
 
     <div class="chat-container">
-        <div class="messages-container" id="messages"></div>
-        <div class="message-input-container">
-            <input type="text" id="messageInput" placeholder="Type a message...">
-            <button id="sendButton">Send</button>
+      <div class="messages-container" id="messages"></div>
+      <div class="message-input-container">
+        <input type="text" id="messageInput" placeholder="Enter a message">
+        <button id="emojiButton" title="Add Emoji">😊</button>
+        <div id="emojiPickerContainer" class="hidden">
+          <div id="emojiPicker">
+            <span>😀</span> <span>😂</span> <span>❤️</span> <span>👍</span> <span>🎉</span> <span>😊</span>
+            <span>🤔</span> <span>🥳</span> <span>🙌</span> <span>😎</span> <span>🙏</span> <span>🤩</span>
+          </div>
         </div>
+        <button id="sendButton">Send</button>
+        <button id="clearChatButton">Clear Chat</button>
+      </div>
     </div>
+    
 
     <script>
         const messagesDiv = document.getElementById('messages');
@@ -31,8 +40,12 @@
         const usernameModal = document.getElementById('usernameModal');
         const usernameInput = document.getElementById('usernameInput');
         const usernameSubmitButton = document.getElementById('usernameSubmitButton');
+        const clearChatButton = document.getElementById('clearChatButton');
+        const emojiButton = document.getElementById('emojiButton');
+        const emojiPickerContainer = document.getElementById('emojiPickerContainer');
+
         const ws = new WebSocket('ws://localhost:3000');
-      
+
         let username = '';
       
         // Show modal to set username when the page loads
@@ -92,28 +105,47 @@
             messageInput.value = ''; // Clear the input field
         });
       
-        // Function to display a message in the chat
-        function displayMessage(message, isSender = false) {
-            const messageContainer = document.createElement('div');
-            const messageElement = document.createElement('div');
-            messageElement.textContent = message;
-        
-            messageContainer.classList.add('message-container');
-        
-            if (isSender) {
-                messageContainer.classList.add('sender-message-container');
-                messageElement.classList.add('message-bubble', 'sender-message-bubble');
-            } else {
-                messageElement.classList.add('message-bubble');
-            }
-        
-            messageContainer.appendChild(messageElement);
-            messagesDiv.appendChild(messageContainer);
-        
-            // Scroll to the bottom of the chat
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        }
-    </script>
+        // Display a message
+        function displayMessage(content, isSender = false) {
+          const isEmojiOnly = /^[\u{1F600}-\u{1F64F}]$/u.test(content.split(': ')[1]); // Checks if message contains only emojis
+          const messageContainer = document.createElement('div');
+          const messageElement = document.createElement('div');
 
+          if (isEmojiOnly) {
+            messageElement.textContent = content.split(': ')[1];
+            messageElement.classList.add('enlarged-emoji');
+            messageContainer.classList.add('enlarged-emoji-container');
+          } else {
+            messageElement.textContent = content;
+            messageElement.classList.add('message-bubble');
+          }
+
+          if (isSender) {
+            messageContainer.classList.add('sender-message-container');
+          }
+
+          messageContainer.appendChild(messageElement);
+          messagesDiv.appendChild(messageContainer);
+          messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        // Toggle emoji picker
+        emojiButton.addEventListener('click', () => {
+          emojiPickerContainer.classList.toggle('hidden');
+        });
+
+        // Add emoji to input
+        emojiPickerContainer.addEventListener('click', (event) => {
+          if (event.target.tagName === 'SPAN') {
+            const selectedEmoji = event.target.textContent;
+            messageInput.value += selectedEmoji;
+            emojiPickerContainer.classList.add('hidden');
+          }
+        });
+              
+          clearChatButton.addEventListener('click', () => {
+          messagesDiv.innerHTML = ''; // Clear all messages
+          });
+    </script>
 </body>
 </html>
