@@ -20,36 +20,52 @@
     const messageInput = document.getElementById('messageInput');
     const sendButton = document.getElementById('sendButton');
     const ws = new WebSocket('ws://localhost:3000');
-  
+
     ws.addEventListener('message', (event) => {
       const message = event.data;
       displayMessage(message);
     });
-  
+
     sendButton.addEventListener('click', () => {
-      const message = messageInput.value;
+      const message = messageInput.value.trim(); // Trim to avoid sending spaces
+
+      if (!message) {
+        // Display warning in the input box
+        messageInput.placeholder = "Enter a message";
+        messageInput.style.border = "2px crimson solid";
+        messageInput.style.color = "red";
+
+        // Remove the warning when the user types
+        messageInput.addEventListener('input', () => {
+          messageInput.placeholder = "Type a message...";
+          messageInput.style.border = "none";
+          messageInput.style.color = "black";
+        });
+        return;
+      }
+
       ws.send(message);
       displayMessage(message, true);
       messageInput.value = '';
     });
-  
+
     function displayMessage(message, isSender = false) {
       const messageContainer = document.createElement('div');
       const messageElement = document.createElement('div');
       messageElement.textContent = message;
-      
+
       messageContainer.classList.add('message-container');
-      
+
       if (isSender) {
         messageContainer.classList.add('sender-message-container');
         messageElement.classList.add('message-bubble', 'sender-message-bubble');
       } else {
         messageElement.classList.add('message-bubble');
       }
-      
+
       messageContainer.appendChild(messageElement);
       messagesDiv.appendChild(messageContainer);
-      
+
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
   </script>
