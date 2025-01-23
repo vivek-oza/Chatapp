@@ -67,7 +67,7 @@ body {
   border: none;
   outline: none;
   border-radius: 20px;
-  height: 40px;
+  height: 60px;
   font-size: 20px;
   background-color: #ffffff;
   padding: 10px 16px 10px 16px;
@@ -93,3 +93,62 @@ body {
 #sendButton:active {
   background-color: #3b9aff;
 }
+
+/* Modal (popup) styling */
+.modal {
+  display: none; /* Initially hidden */
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(41, 40, 40, 0.8); /* Background */
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 30px; /* Increased padding for a better layout */
+  margin-top: 10vh; /* Centering vertically with respect to the viewport */
+  border-radius: 20px;
+  text-align: center;
+  height: auto; /* Allow height to adjust based on content */
+  width: 450px; /* Slightly reduced width for better responsiveness */
+  font-family: sans-serif;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow for better visibility */
+}
+
+input {
+  width: 90%; /* Increased width for more input space */
+  height: 50px;
+  padding: 10px 16px;
+  margin-top: 20px;
+  border-radius: 15px;
+  border: 2px solid #484848;
+  outline: none;
+  background-color: #ffffff;
+  font-size: 18px; /* Slightly reduced font size for better spacing */
+  box-sizing: border-box; /* Ensures padding doesn't affect width calculation */
+}
+
+button {
+  width: 90%; /* Increased width for better alignment */
+  height: 50px;
+  padding: 10px 16px;
+  margin-top: 20px;
+  border-radius: 15px;
+  border: none;
+  outline: none;
+  background-color: #079c13;
+  color: #fff;
+  font-size: 18px; /* Slightly reduced font size for consistency */
+  cursor: pointer; /* Changes cursor to indicate the button is clickable */
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+button:hover {
+  background-color: #067a0e; /* Darker shade on hover for better interactivity */
+}
+
+

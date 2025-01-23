@@ -12,10 +12,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 wss.on('connection', (ws) => {
   console.log('Client connected');
 
-  ws.on('message', (message) => {
+  ws.on('message', (data) => {
+    const parsedData = JSON.parse(data); // Parse incoming message
+    const { username, message } = parsedData;
+
     wss.clients.forEach((client) => {
       if (client !== ws && client.readyState === WebSocket.OPEN) {
-        client.send(message.toString());
+        client.send(JSON.stringify({ username, message })); // Broadcast message
       }
     });
   });
