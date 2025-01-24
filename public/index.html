@@ -117,27 +117,34 @@
       
         // Display a message
         function displayMessage(content, isSender = false) {
-          const isEmojiOnly = /^[\u{1F600}-\u{1F64F}]$/u.test(content.split(': ')[1]); // Checks if message contains only emojis
-          const messageContainer = document.createElement('div');
-          const messageElement = document.createElement('div');
+          const isEmojiOnly = /^[\p{Emoji_Presentation}\p{Extended_Pictographic}]+$/u.test(content.split(': ')[1]?.trim());
+  
+        const messageContainer = document.createElement('div');
+        const usernameElement = document.createElement('div');
+        const messageElement = document.createElement('div');
 
-          if (isEmojiOnly) {
-            messageElement.textContent = content.split(': ')[1];
-            messageElement.classList.add('enlarged-emoji');
-            messageContainer.classList.add('enlarged-emoji-container');
-          } else {
-            messageElement.textContent = content;
-            messageElement.classList.add('message-bubble');
-          }
+        if (isEmojiOnly) {
+          const [username, emoji] = content.split(': ');
+          usernameElement.textContent = username + ':'; // Username above emoji
+          usernameElement.classList.add('username');
 
+          messageElement.textContent = emoji.trim(); // Emoji content
+          messageElement.classList.add('enlarged-emoji');
+
+          messageContainer.classList.add('sender-emoji-message'); // Align emoji + username
+          messageContainer.appendChild(usernameElement);
+        } else {
+          messageElement.textContent = content;
+          messageElement.classList.add('message-bubble');
           if (isSender) {
             messageContainer.classList.add('sender-message-container');
           }
-
-          messageContainer.appendChild(messageElement);
-          messagesDiv.appendChild(messageContainer);
-          messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
+
+        messageContainer.appendChild(messageElement);
+        messagesDiv.appendChild(messageContainer);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      }
 
         // Toggle emoji picker
         emojiButton.addEventListener('click', () => {
@@ -177,8 +184,10 @@
         // List of background images (URLs)
         const themeImages = [
           'url("https://images.unsplash.com/photo-1554147090-e1221a04a025?q=80&w=2048&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")',
-          'url("https://images.unsplash.com/photo-1469050624972-f03b8678e363?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")',
+          'url("https://images.unsplash.com/photo-1500881263786-ad74c00b9e60?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")',
           'url("https://images.unsplash.com/photo-1507843528572-dce34aa57530?q=80&w=2047&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")',
+          'url("https://images.unsplash.com/photo-1496938884040-e0456a8512ca?q=80&w=2068&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")',
+          'url("https://images.unsplash.com/photo-1498480086004-2400bd8c3663?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")',
           'url("https://images.unsplash.com/photo-1508062082364-fb2678d58976?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")'
         ];
 
