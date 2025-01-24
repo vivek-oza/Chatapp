@@ -117,34 +117,77 @@
       
         // Display a message
         function displayMessage(content, isSender = false) {
-          const isEmojiOnly = /^[\p{Emoji_Presentation}\p{Extended_Pictographic}]+$/u.test(content.split(': ')[1]?.trim());
-  
-        const messageContainer = document.createElement('div');
-        const usernameElement = document.createElement('div');
-        const messageElement = document.createElement('div');
+            const isEmojiOnly = /^[\p{Emoji_Presentation}\p{Extended_Pictographic}]+$/u.test(content.split(': ')[1]?.trim());
 
-        if (isEmojiOnly) {
-          const [username, emoji] = content.split(': ');
-          usernameElement.textContent = username + ':'; // Username above emoji
-          usernameElement.classList.add('username');
+            const messageContainer = document.createElement('div');
+            const usernameElement = document.createElement('div');
+            const messageElement = document.createElement('div');
+            const timestampElement = document.createElement('div'); // For displaying the timestamp
 
-          messageElement.textContent = emoji.trim(); // Emoji content
-          messageElement.classList.add('enlarged-emoji');
+            // Get the current date and time
+            const timestamp = new Date();
+            const formattedTime = formatTimestamp(timestamp); // Format the timestamp
 
-          messageContainer.classList.add('sender-emoji-message'); // Align emoji + username
-          messageContainer.appendChild(usernameElement);
-        } else {
-          messageElement.textContent = content;
-          messageElement.classList.add('message-bubble');
-          if (isSender) {
-            messageContainer.classList.add('sender-message-container');
-          }
+            if (isEmojiOnly) {
+                const [username, emoji] = content.split(': ');
+                usernameElement.textContent = username + ':'; // Username above emoji
+                usernameElement.classList.add('username');
+
+                messageElement.textContent = emoji.trim(); // Emoji content
+                messageElement.classList.add('enlarged-emoji');
+
+                messageContainer.classList.add('sender-emoji-message'); // Align emoji + username
+                messageContainer.appendChild(usernameElement);
+            } else {
+                messageElement.textContent = content;
+                messageElement.classList.add('message-bubble');
+                if (isSender) {
+                    messageContainer.classList.add('sender-message-container');
+                }
+            }
+
+            // Add timestamp to the message
+            timestampElement.textContent = formattedTime;
+            timestampElement.classList.add('timestamp'); // Style the timestamp separately
+            messageContainer.appendChild(messageElement);
+            messageContainer.appendChild(timestampElement); // Append the timestamp
+
+            messagesDiv.appendChild(messageContainer);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
 
-        messageContainer.appendChild(messageElement);
-        messagesDiv.appendChild(messageContainer);
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
-      }
+        // Function to format the timestamp
+        function formatTimestamp(date) {
+            const options = {
+                weekday: 'short', // e.g., "Mon"
+                year: 'numeric', // e.g., "2025"
+                month: 'short', // e.g., "Jan"
+                day: 'numeric', // e.g., "24"
+                hour: 'numeric', // e.g., "10"
+                minute: 'numeric', // e.g., "15"
+                hour12: true, // 12-hour format with AM/PM
+            };
+            
+            return date.toLocaleString('en-US', options); // Return formatted date and time
+        }
+
+        // Styling for timestamp
+        const style = document.createElement('style');
+        style.textContent = `
+            .profile-image {
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                margin-right: 10px;
+            }
+            .timestamp {
+                font-size: 0.8em;
+                color: gray;
+                margin-top: 5px;
+                text-align: right;
+            }
+        `;
+        document.head.appendChild(style);
 
         // Toggle emoji picker
         emojiButton.addEventListener('click', () => {
