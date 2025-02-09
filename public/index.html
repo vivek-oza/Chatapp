@@ -59,7 +59,7 @@
     const emojiButton = document.getElementById('emojiButton');
     const emojiPickerContainer = document.getElementById('emojiPickerContainer');
 
-    const socket = io("https://your-app-name.onrender.com");
+    const socket = io(); // No URL needed when serving from same origin
 
     let username = '';
 

@@ -5,14 +5,15 @@ const { Server } = require("socket.io");
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"],
-  },
-});
+const io = new Server(server);
 
+// Serve static files from public directory
 app.use(express.static(path.join(__dirname, "public")));
+
+// Serve index.html for the root route
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
 
 io.on("connection", (socket) => {
   console.log("Client connected");
