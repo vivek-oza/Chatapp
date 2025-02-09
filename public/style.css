@@ -312,3 +312,28 @@ button {
   margin-top: 15px;
 }
 
+.sender-emoji-message {
+  display: flex;
+  flex-direction: column; /* Stack username above emoji */
+  align-items: flex-end; /* Align to the right side */
+  margin: 10px 0;
+}
+
+.enlarged-emoji {
+  font-size: 200%; /* Emoji is 200% enlarged */
+  text-align: right;
+  margin-top: 5px;
+  margin-left: auto;
+  display: inline-block;
+}
+
+.username {
+  font-size: 14px;
+  color: #555;
+  text-align: right;
+  margin-bottom: 5px; /* Add space below username */
+}
+
+
+
+
