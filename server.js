@@ -19,7 +19,6 @@ io.on("connection", (socket) => {
   console.log("Client connected");
 
   socket.on("chat message", (data) => {
-    // Broadcast to all clients except sender
     socket.broadcast.emit("chat message", data);
   });
 
